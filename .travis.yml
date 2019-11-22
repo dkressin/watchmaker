@@ -1,3 +1,4 @@
+dist: xenial
 language: python
 stages:
   - test
@@ -7,11 +8,11 @@ env:
     - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
     - SEGFAULT_SIGNALS=all
 python:
-  - 2.6
   - 2.7
   - 3.4
   - 3.5
   - 3.6
+  - 3.7
 stage: test
 before_install:
   # don't overwrite env if it's already set (otherwise check, docs won't work properly)
@@ -54,6 +55,9 @@ notifications:
     on_failure: always
 jobs:
   include:
+    - stage: test
+      python: 2.6
+      dist: trusty
     - stage: test
       python: 3.6
       env:
@@ -103,7 +107,7 @@ jobs:
       deploy:
         - provider: script
           # deploy to github releases
-          script: satsuki --verbose
+          script: satsuki
           skip_cleanup: true
           on:
             branch: $RELEASE_BRANCH

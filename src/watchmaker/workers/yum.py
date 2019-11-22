@@ -9,10 +9,11 @@ import six
 
 import watchmaker.utils
 from watchmaker.exceptions import WatchmakerException
-from watchmaker.managers.base import LinuxManager
+from watchmaker.managers.platform import LinuxPlatformManager
+from watchmaker.workers.base import WorkerBase
 
 
-class Yum(LinuxManager):
+class Yum(WorkerBase, LinuxPlatformManager):
     """
     Install yum repos.
 
@@ -20,6 +21,7 @@ class Yum(LinuxManager):
         repo_map: (:obj:`list`)
             List of dictionaries containing a map of yum repo files to systems.
             (*Default*: ``[]``)
+
     """
 
     SUPPORTED_DISTS = ('amazon', 'centos', 'red hat')

@@ -1,5 +1,214 @@
 ## Changelog
 
+### 0.16.5
+
+**Commit Delta**: [Change from 0.16.4 release](https://github.com/plus3it/watchmaker/compare/0.16.4...0.16.5)
+
+**Released**: 2019.09.23
+
+**Summary**:
+
+*   join-domain-formula
+    -   Add support for restricting Active Directory sites that will be consulted if the `ad_site_name` key-value is set in the pillar
+*   ash-linux-formula
+    -   Fix issue with log spamming by `systemd` related to file permissions
+*   ash-windows-formula
+    -   Update STIG baselines for 2019-07 SCAP content
+*   scap-formula
+    -   Rename DISA content files to reflect SCAP version
+    -   Update DISA SCAP content to July 2019 release
+*   salt-content
+    -   Update SCAP pillar to match filename changes in SCAP formula
+
+### 0.16.4
+
+**Commit Delta**: [Change from 0.16.3 release](https://github.com/plus3it/watchmaker/compare/0.16.3...0.16.4)
+
+**Released**: 2019.08.23
+
+**Summary**:
+
+*   Updates documentation on pip usage in Linux to always use `python3 -m pip...`
+*   dotnet4-formula
+    -   Adds .NET Framework 4.8 version and associated KB to lookup tables
+*   fup-formula
+    -   New salt formula to install packages via URL
+*   scap-formula
+    -   (Windows) Adds configuration to allow scan results to be generated when using SCC v5.0.2 and higher
+*   watchmaker-salt-content
+    -   (Windows) Adds .NET Framework 4.8 info to dotnet winrepo package content
+
+### 0.16.3
+
+**Commit Delta**: [Change from 0.16.2 release](https://github.com/plus3it/watchmaker/compare/0.16.2...0.16.3)
+
+**Released**: 2019.08.7
+
+**Summary**:
+
+*   join-domain-formula
+    -   (Linux) Modifies method used to retrieve hostname to avoid issues with `hostname -f`
+    -   (Linux) Improves error messaging if tooling dependencies are not installed
+    -   (Linux) Modifies domain controller search mechanism to preserve compatibility with EL6
+    -   (Linux) Logs the computer name in the domain-join output
+*   mcafee-agent-formula
+    -   (Linux) Adds a pillar option to pass args to the mcafee agent installer
+    -   (Linux) Fixes match on OS version to ensure firewall ports are opened
+*   name-computer-formula
+    -   (Linux) Updates /etc/hosts with hostname fqdn, when the domain name is provided
+
+### 0.16.2
+
+**Commit Delta**: [Change from 0.16.1 release](https://github.com/plus3it/watchmaker/compare/0.16.1...0.16.2)
+
+**Released**: 2019.07.11
+
+**Summary**:
+
+*   join-domain-formula
+    -   Fixes detection of running system's join state, searches for shortname, and retries joins
+    -   Improves compatibility with strict Bash
+    -   Adds option to skip GPG check
+*   amazon-inspector-formula
+    -   Adds option to skip GPG check
+*   splunkforwarder-formula
+    -   Redirects splunk log folder with symlink
+    -   Adds option to skip GPG check
+
+### 0.16.1
+
+**Commit Delta**: [Change from 0.16.0 release](https://github.com/plus3it/watchmaker/compare/0.16.0...0.16.1)
+
+**Released**: 2019.06.21
+
+**Summary**:
+
+*   join-domain-formula
+    -   Updates find-collision.sh ldap search to include uppercase and lowercase versions of provided hostname
+*   scap-formula
+    -   Adds script to build OSCAP content with 'stig' profile included for CentOS
+    -   Updates OSCAP content to v0.1.44
+*   watchmaker-salt-content
+    -   Switches Linux scap profile pillar settings to 'stig'
+
+### 0.16.0
+
+**Commit Delta**: [Change from 0.15.2 release](https://github.com/plus3it/watchmaker/compare/0.15.2...0.16.0)
+
+**Released**: 2019.05.10
+
+**Summary**:
+
+*   Adds salt content locally as a submodule to better support Watchmaker standalone packages
+*   dotnet4-formula
+    -   Updates formula to support the use of Python3 versions of Salt
+*   join-domain-formula
+    -   Adds additional enhancements and logic to better handle the domin-join process in Linux
+
+### 0.15.2
+
+**Commit Delta**: [Change from 0.15.1 release](https://github.com/plus3it/watchmaker/compare/0.15.1...0.15.2)
+
+**Released**: 2019.04.12
+
+**Summary**:
+
+*   ash-linux-formula
+    -   Removes outdated and conflicting states to allow setting of custom banner text
+*   join-domain-formula
+    -   Fixes issue with improper handling of admin names with spaces in Windows
+
+### 0.15.1
+
+**Commit Delta**: [Change from 0.15.0 release](https://github.com/plus3it/watchmaker/compare/0.15.0...0.15.1)
+
+**Released**: 2019.04.05
+
+**Summary**:
+
+*   join-domain-formula
+    -   (Linux) Avoids `unique` jinja filter to preserve compatibility for older
+        versions of salt
+
+### 0.15.0
+
+**Commit Delta**: [Change from 0.14.2 release](https://github.com/plus3it/watchmaker/compare/0.14.2...0.15.0)
+
+**Released**: 2019.04.04
+
+**Summary**:
+
+*   Updates documentation to install pip using `ensurepip` module instead of external
+    `get-pip.py`
+*   ash-linux-formula
+    -   Adds pillar option to set content for `/etc/issue` login banner
+*   join-domain-formula
+    -   (Linux) Adds pillar option to pass a list of domains to add to the trust
+        list
+
+### 0.14.2
+
+**Commit Delta**: [Change from 0.14.1 release](https://github.com/plus3it/watchmaker/compare/0.14.1...0.14.2)
+
+**Released**: 2019.03.26
+
+**Summary**:
+
+*   join-domain-formula
+    -   Corrects regression on Windows to support adding admin groups that have
+        spaces in the name
+
+### 0.14.1
+
+**Commit Delta**: [Change from 0.14.0 release](https://github.com/plus3it/watchmaker/compare/0.14.0...0.14.1)
+
+**Released**: 2019.03.18
+
+**Summary**:
+
+*   Fixes Python 2.6 incompatibility introduced by new version of PyYAML
+*   join-domain-formula
+    -   Fixes issue adding admin groups/users to Windows systems with recent versions of Salt
+
+### 0.14.0
+
+**Commit Delta**: [Change from 0.13.0 release](https://github.com/plus3it/watchmaker/compare/0.13.0...0.14.0)
+
+**Released**: 2019.03.06
+
+**Summary**:
+
+*   Adds additional documentation to answer common EL7 security scan findings
+*   ash-linux-formula
+    -   Implements additional Salt states to address security scan issues
+        -   Capability to manage GRUB password configuration
+        -   IgnoreRhosts setting in SSH daemon configuration
+        -   CIS remediation handlers ( CIS 5.2.3, CIS 5.2.5)
+    -   Adds Salt state to update audit-rule changes without a system reboot
+*   scap-formula
+    -   Updates SCAP Security Guide content to v0.1.41
+
+### 0.13.0
+
+**Commit Delta**: [Change from 0.12.1 release](https://github.com/plus3it/watchmaker/compare/0.12.1...0.13.0)
+
+**Released**: 2019.01.29
+
+**Summary**:
+
+*   amazon-inspector-formula
+    - New salt formula distributed with watchmaker
+    - Installs amazon-inspector agent
+*   Refactor watchmaker
+    - Change naming mechanism from LinuxManager to LinuxPlatformManager
+    - Change naming mechanism from WindowsManager to WindowsPlatformManager
+    - Change naming mechanism from Manager to PlatformManager
+    - Added abstract class WorkerBase for Workers to inherit from
+*   ash-linux-formula
+    - Change ipv6 check to use if_inet6 file
+    - Import correct source of fopen function
+    - Configure Postfix to only use ipv4 when ipv6 is disabled
+
 ### 0.12.1
 
 **Commit Delta**: [Change from 0.12.0 release](https://github.com/plus3it/watchmaker/compare/0.12.0...0.12.1)

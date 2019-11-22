@@ -14,10 +14,13 @@ import yaml
 import watchmaker.utils
 from watchmaker import static
 from watchmaker.exceptions import InvalidValue, WatchmakerException
-from watchmaker.managers.base import LinuxManager, ManagerBase, WindowsManager
+from watchmaker.managers.platform import (LinuxPlatformManager,
+                                          PlatformManagerBase,
+                                          WindowsPlatformManager)
+from watchmaker.workers.base import WorkerBase
 
 
-class SaltBase(ManagerBase):
+class SaltBase(WorkerBase, PlatformManagerBase):
     r"""
     Cross-platform worker for running salt.
 
@@ -80,6 +83,7 @@ class SaltBase(ManagerBase):
             computer account will be created when joining a domain.
             E.g. ``"OU=SuperCoolApp,DC=example,DC=com"``
             (*Default*: ``''``)
+
     """
 
     def __init__(self, *args, **kwargs):
@@ -128,6 +132,10 @@ class SaltBase(ManagerBase):
             self.log.critical(msg)
             raise InvalidValue(msg)
 
+    def install(self):
+        """Install Salt."""
+        pass
+
     @staticmethod
     def _get_salt_dirs(srv):
         salt_base_env = os.sep.join((srv, 'states'))
@@ -162,7 +170,6 @@ class SaltBase(ManagerBase):
         ]
 
         for salt_dir in [
-            self.salt_base_env,
             self.salt_formula_root,
             self.salt_conf_path
         ]:
@@ -170,7 +177,7 @@ class SaltBase(ManagerBase):
                 os.makedirs(salt_dir)
             except OSError:
                 if not os.path.isdir(salt_dir):
-                    msg = ('Unable create directory - {0}'.format(salt_dir))
+                    msg = ('Unable to create directory - {0}'.format(salt_dir))
                     self.log.error(msg)
                     raise SystemError(msg)
 
@@ -187,11 +194,11 @@ class SaltBase(ManagerBase):
         formulas_path = os.sep.join((static.__path__[0], 'salt', 'formulas'))
         for formula in os.listdir(formulas_path):
             formula_path = os.path.join(self.salt_formula_root, '', formula)
-            if os.path.exists(formula_path):
-                shutil.rmtree(formula_path)
-            shutil.copytree(
+            watchmaker.utils.copytree(
                 os.sep.join((formulas_path, formula)),
-                formula_path)
+                formula_path,
+                force=True
+            )
 
         # Obtain & extract any Salt formulas specified in user_formulas.
         for formula_name, formula_url in self.user_formulas.items():
@@ -234,7 +241,7 @@ class SaltBase(ManagerBase):
         ]
 
     def _build_salt_formula(self, extract_dir):
-        if self.salt_content:
+        if self.salt_content and self.salt_content != 'None':
             salt_content_filename = watchmaker.utils.basename_from_uri(
                 self.salt_content
             )
@@ -247,6 +254,23 @@ class SaltBase(ManagerBase):
                 filepath=salt_content_file,
                 to_directory=extract_dir
             )
+
+        bundled_content = os.sep.join(
+            (static.__path__[0], 'salt', 'content')
+        )
+        for subdir in next(os.walk(bundled_content))[1]:
+            if (
+                not subdir.startswith('.') and
+                not os.path.exists(os.sep.join((extract_dir, subdir)))
+            ):
+                watchmaker.utils.copytree(
+                    os.sep.join((bundled_content, subdir)),
+                    os.sep.join((extract_dir, subdir))
+                )
+                self.log.info(
+                    'Using bundled content from %s',
+                    os.sep.join((bundled_content, subdir))
+                )
 
         with codecs.open(
             os.path.join(self.salt_conf_path, 'minion'),
@@ -296,6 +320,7 @@ class SaltBase(ManagerBase):
                 Watchmaker will always begin the command with the options
                 ``--local``, ``--retcode-passthrough``, and ``--no-color``, so
                 do not specify those options in the command.
+
         """
         cmd = [
             self.salt_call,
@@ -502,7 +527,7 @@ class SaltBase(ManagerBase):
             self.log.info('Salt states all applied successfully!')
 
 
-class SaltLinux(SaltBase, LinuxManager):
+class SaltLinux(SaltBase, LinuxPlatformManager):
     """
     Run salt on Linux.
 
@@ -528,6 +553,7 @@ class SaltLinux(SaltBase, LinuxManager):
             A git reference present in ``git_repo``, such as a commit or a tag.
             If not specified, the HEAD of the default branch is used.
             (*Default*: ``''``)
+
     """
 
     def __init__(self, *args, **kwargs):
@@ -670,7 +696,7 @@ class SaltLinux(SaltBase, LinuxManager):
             self.cleanup()
 
 
-class SaltWindows(SaltBase, WindowsManager):
+class SaltWindows(SaltBase, WindowsPlatformManager):
     """
     Run salt on Windows.
 
@@ -683,6 +709,7 @@ class SaltWindows(SaltBase, WindowsManager):
             salt formula. E.g. ``"MemberServer"``, ``"DomainController"``, or
             ``"Workstation"``
             (*Default*: ``''``)
+
     """
 
     def __init__(self, *args, **kwargs):

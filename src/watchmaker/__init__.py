@@ -18,8 +18,8 @@ import watchmaker.utils
 from watchmaker import static
 from watchmaker.exceptions import WatchmakerException
 from watchmaker.logger import log_system_details
-from watchmaker.managers.workers import (LinuxWorkersManager,
-                                         WindowsWorkersManager)
+from watchmaker.managers.worker_manager import (LinuxWorkersManager,
+                                                WindowsWorkersManager)
 from watchmaker.utils import urllib
 
 
@@ -163,6 +163,7 @@ class Arguments(dict):
                 # This list would be converted to the following dict and merged
                 # into the parameters passed to the worker configurations:
                 {'arg1': 'value1', 'arg2': 'value2'}
+
     """
 
     def __init__(
@@ -203,6 +204,7 @@ class Client(object):
     Keyword Arguments:
         arguments: (:obj:`Arguments`)
             A dictionary of arguments. See :class:`watchmaker.Arguments`.
+
     """
 
     def __init__(self, arguments):
@@ -278,8 +280,8 @@ class Client(object):
             data = watchmaker.utils.urlopen_retry(self.config_path).read()
         except (ValueError, urllib.error.URLError):
             msg = (
-                'Could not read the config from {0}! Please make sure your '
-                'config is available.'.format(self.config_path)
+                'Could not read config file from the provided value "{0}"! '
+                'Check that the config is available.'.format(self.config_path)
             )
             self.log.critical(msg)
             raise

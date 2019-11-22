@@ -2,7 +2,7 @@
    :width: 140px
    :alt: Powered by Plus3 IT Systems
    :align: right
-   :target: https://plus3it.com
+   :target: https://www.plus3it.com
 <br>
 
 # Usage
@@ -114,7 +114,6 @@ on the [CLI](#watchmaker-from-the-cli). Here is an example:
 
 ```shell
 #!/bin/sh
-PIP_URL=https://bootstrap.pypa.io/get-pip.py
 PYPI_URL=https://pypi.org/simple
 
 # Setup terminal support for UTF-8
@@ -122,13 +121,13 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 # Install pip
-curl "$PIP_URL" | python3 - --index-url="$PYPI_URL"
+python3 -m ensurepip
 
 # Install setup dependencies
-pip install --index-url="$PYPI_URL" --upgrade pip setuptools
+python3 -m pip install --index-url="$PYPI_URL" --upgrade pip setuptools
 
 # Install Watchmaker
-pip install --index-url="$PYPI_URL" --upgrade watchmaker
+python3 -m pip install --index-url="$PYPI_URL" --upgrade watchmaker
 
 # Run Watchmaker
 watchmaker --log-level debug --log-dir=/var/log/watchmaker
@@ -141,7 +140,6 @@ Alternatively, cloud-config directives can also be used on **Linux**:
 
 runcmd:
   - |
-    PIP_URL=https://bootstrap.pypa.io/get-pip.py
     PYPI_URL=https://pypi.org/simple
 
     # Setup terminal support for UTF-8
@@ -149,13 +147,13 @@ runcmd:
     export LANG=en_US.UTF-8
 
     # Install pip
-    curl "$PIP_URL" | python3 - --index-url="$PYPI_URL"
+    python3 -m ensurepip
 
     # Install setup dependencies
-    pip install --index-url="$PYPI_URL" --upgrade pip setuptools
+    python3 -m pip install --index-url="$PYPI_URL" --upgrade pip setuptools
 
     # Install Watchmaker
-    pip install --index-url="$PYPI_URL" --upgrade watchmaker
+    python3 -m pip install --index-url="$PYPI_URL" --upgrade watchmaker
 
     # Run Watchmaker
     watchmaker --log-level debug --log-dir=/var/log/watchmaker
@@ -170,7 +168,7 @@ simple bootstrap script to do that for you. After installing Python, install
 ```shell
 <powershell>
 $BootstrapUrl = "https://raw.githubusercontent.com/plus3it/watchmaker/master/docs/files/bootstrap/watchmaker-bootstrap.ps1"
-$PythonUrl = "https://www.python.org/ftp/python/3.6.4/python-3.6.4-amd64.exe"
+$PythonUrl = "https://www.python.org/ftp/python/3.6.8/python-3.6.8-amd64.exe"
 $PypiUrl = "https://pypi.org/simple"
 
 # Download bootstrap file
@@ -233,7 +231,7 @@ Variables can be input interactively via the Terraform console or directly to
 the Terraform module. An example Terraform file that calls the `lx-autoscale`
 module is shown below.
 
-```
+```terraform
 provider "aws" {}
 
 module "test-lx-instance" {
@@ -276,7 +274,7 @@ command. For example, a JSON string could contain
 
 These parameters can be passed in via Azure CLI or within a Resource Management
 Template. For more in-depth information, see Microsoft's
-[documentation on Linux](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/extensions-customscript).
+[documentation on Linux](https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/custom-script-linux).
 
 For Windows, you would execute a PowerShell script in a similar manner as for
 [Windows](#windows) (but without the powershell tags). Then you would have the
@@ -290,7 +288,7 @@ following parameters:
 ```
 
 For more in-depth information on using Custom Script Extension for Windows, see
-Microsoft's [documentation on Windows](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/extensions-customscript).
+Microsoft's [documentation on Windows](https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/custom-script-windows).
 
 ## `watchmaker` as a library
 
